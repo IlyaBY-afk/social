@@ -1,0 +1,1 @@
+# FastAPI + NextJS social network web application
