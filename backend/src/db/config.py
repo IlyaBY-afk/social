@@ -1,12 +1,7 @@
-import os
-from dotenv import load_dotenv
-
 from src.db.manager import SqlDbManager
-
-
-load_dotenv()
+from settings import settings
 
 
 db_manager = SqlDbManager(
-    os.getenv("DB_LINK")
+    settings.DB_URL
 )

@@ -2,7 +2,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlmodel import SQLModel, Field, String
 from pydantic import EmailStr
 from datetime import datetime
-from typing import Optional
 
 
 AlchemyBase = declarative_base()
@@ -25,4 +24,3 @@ class User(Base, table=True):
     )
     username: str = Field(index=True)
     password: str = Field()
-
