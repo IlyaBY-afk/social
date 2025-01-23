@@ -1,16 +1,15 @@
-from fastapi import HTTPException
-from pydantic import BaseModel, EmailStr, model_validator
-from typing import Self
+import uuid
+
+from fastapi_users import schemas
 
 
-class UserRegisterSchema(BaseModel):
-    email: EmailStr
-    username: str
-    password: str
-    password_repeat: str
+class UserRead(schemas.BaseUser[uuid.UUID]):
+    pass
 
-    @model_validator(mode='after')
-    def confirm_password(self) -> Self:
-        if self.password != self.password_repeat:
-            raise HTTPException(status_code=400, detail="Passwords do not match.")
-        return self
+
+class UserCreate(schemas.BaseUserCreate):
+    pass
+
+
+class UserUpdate(schemas.BaseUserUpdate):
+    pass

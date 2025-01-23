@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Iterable
-from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlmodel import select
 from sqlmodel.sql.expression import _ColumnExpressionArgument, SelectOfScalar
 from sqlmodel.ext.asyncio.session import AsyncSession

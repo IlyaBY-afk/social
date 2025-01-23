@@ -2,7 +2,6 @@ from pydantic import Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from typing import Literal
-import os
 
 
 class Settings(BaseSettings):

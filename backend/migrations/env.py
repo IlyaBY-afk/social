@@ -1,7 +1,6 @@
 import asyncio
 from logging.config import fileConfig
 from dotenv import load_dotenv
-from os import getenv
 import sys
 
 from sqlalchemy import engine_from_config
@@ -13,7 +12,8 @@ from alembic import context
 
 sys.path = ['', '..'] + sys.path[1:]
 
-from src.models import AlchemyBase
+from src.models import Base
+from settings import settings
 
 
 load_dotenv()
@@ -33,14 +33,14 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = AlchemyBase.metadata
+target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 
-config.set_main_option('sqlalchemy.url', getenv('DB_LINK'))
+config.set_main_option('sqlalchemy.url', settings.DB_URL)
 
 
 def run_migrations_offline() -> None:
