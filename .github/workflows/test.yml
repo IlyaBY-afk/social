@@ -1,0 +1,27 @@
+name: FastAPI test on push
+
+on:
+  pull_request:
+    branches: ["main"]
+  push:
+
+jobs:
+  test:
+    name: python
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable caching
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      
+      - name: Install uv
+        run: astral-sh/setup-uv@v5
+
+      - name: Install the project
+        run: uv sync --all-extras --dev
+        
+      - name: Run tests
+        run: cd backend | pytest
