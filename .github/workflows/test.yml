@@ -46,9 +46,15 @@ jobs:
         run: |
           cd backend
           uv run pytest
-        env:
+        env:  
             TEST_DB_USERNAME: postgres
             TEST_DB_PASSWORD: postgres
             TEST_DB_HOST: localhost
             TEST_DB_PORT: 5432
             TEST_DB_NAME: social-test
+
+            DB_USERNAME: postgres
+            DB_PASSWORD: postgres
+            DB_HOST: localhost
+            DB_PORT: 5432
+            DB_NAME: social-test
