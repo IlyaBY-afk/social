@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Iterable
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel import select
 from sqlmodel.sql.expression import _ColumnExpressionArgument, SelectOfScalar
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -31,9 +31,9 @@ class BaseDbManager(ABC):
     
 
 class SqlDbManager(BaseDbManager):
-    def __init__(self, db_link: str):
+    def __init__(self, db_link: str, params: dict):
         self.engine = create_async_engine(
-            db_link
+            db_link, **params
         )
         # SQLModel.metadata.create_all(self.engine)
 
