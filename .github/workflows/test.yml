@@ -27,6 +27,9 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
+    env:
+      ENV_FILE: .env.actions
       
     steps:        
       - uses: actions/checkout@v4
@@ -41,20 +44,12 @@ jobs:
 
       - name: Install the project
         run: uv sync --all-extras --dev
+
+      - name: Import .env.actions
+        id: import-env
+        run: cat ${{ env.ENV_FILE }} >> $GITHUB_ENV
         
       - name: Run tests
         run: |
           cd backend
           uv run pytest
-        env:  
-            TEST_DB_USERNAME: postgres
-            TEST_DB_PASSWORD: postgres
-            TEST_DB_HOST: localhost
-            TEST_DB_PORT: 5432
-            TEST_DB_NAME: social-test
-
-            DB_USERNAME: postgres
-            DB_PASSWORD: postgres
-            DB_HOST: localhost
-            DB_PORT: 5432
-            DB_NAME: social-test
