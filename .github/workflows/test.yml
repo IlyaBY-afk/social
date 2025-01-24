@@ -15,8 +15,12 @@ jobs:
         # Docker Hub image
         image: postgres
         # Provide the password for postgres
+        ports:
+          - 5432:5432
         env:
+          POSTGRES_DB: social-test      
           POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
@@ -43,7 +47,8 @@ jobs:
           cd backend
           uv run pytest
         env:
-            # The hostname used to communicate with the PostgreSQL service container
-            POSTGRES_HOST: postgres
-            # The default PostgreSQL port
-            POSTGRES_PORT: 5432
+            TEST_DB_USERNAME: postgres
+            TEST_DB_PASSWORD: postgres
+            TEST_DB_HOST: localhost
+            TEST_DB_PORT: 5432
+            TEST_DB_NAME: social-test
