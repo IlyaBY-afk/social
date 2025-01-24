@@ -1,21 +1,38 @@
-from sqlalchemy import NullPool
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import DeclarativeBase, sessionmaker
+import pytest
+import json
+from sqlalchemy import insert
+from httpx import AsyncClient, ASGITransport
 
+from src.db.config import async_session_maker, db_manager
+from src.models import User, Base
+from src.app import app
 from settings import settings
 
 
-if settings.MODE == 'TEST':
-    DB_URL = settings.TEST_DB_URL
-    DB_PARAMS = {'poolclass': NullPool}
-else:
-    DB_URL = settings.DB_URL
-    DB_PARAMS = {}
+@pytest.fixture(scope='session', autouse=True)
+async def prepare_db():
+    assert settings.MODE == 'TEST'
 
+    async with db_manager.engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
+        await conn.run_sync(Base.metadata.create_all)
 
-engine = create_async_engine(settings.DB_URL, **DB_PARAMS)
-async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    def open_mock_json(model: str):
+        with open(f'tests/mock_{model}.json', 'r') as f:
+            return json.load(f)
+        
+    users = open_mock_json('users')
 
+    async with async_session_maker() as session:
+        add_users = insert(User).values(users)
 
-class Base(DeclarativeBase):
-    pass
+        await session.execute(add_users)
+        await session.commit()
+    
+
+@pytest.fixture(scope='function')
+async def ac():
+    async with AsyncClient(
+        transport=ASGITransport(app=app), base_url='http://test'
+    ) as client:
+        yield client
