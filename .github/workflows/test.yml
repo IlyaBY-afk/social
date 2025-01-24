@@ -47,7 +47,11 @@ jobs:
 
       - name: Import .env.actions
         id: import-env
-        run: cat ${{ env.ENV_FILE }} >> $GITHUB_ENV
+        shell: bash
+        run: |
+          while read line; do
+            echo "$line" >> $GITHUB_ENV
+          done < ${{ env.ENV_FILE }}
         
       - name: Run tests
         run: |
