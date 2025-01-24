@@ -24,5 +24,6 @@ jobs:
         run: uv sync --all-extras --dev
         
       - name: Run tests
-        run: cd backend
-        run: pytest
+        run: |
+          cd backend
+          pytest
